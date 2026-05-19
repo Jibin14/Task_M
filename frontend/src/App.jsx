@@ -1,13 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Header from './componentsss/Header';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import "./App.css";
+import Header from './componentsss/Header';
 import Login from './componentsss/Login';
 import Register from './componentsss/Register';
-import "./App.css";
-import Home from './componentsss/Home';
-import NewTask from './componentsss/NewTask';
-import EditTask from './componentsss/Edit';
 
 function App() {
 
