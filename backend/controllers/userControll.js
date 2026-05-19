@@ -6,6 +6,7 @@ const fs = require("fs");
 // ================= REGISTER =================
 exports.userRegistration = async (req, res) => {
   try {
+
     const { fullName, email, password } = req.body;
 
     if (!fullName || !email || !password) {
@@ -15,13 +16,19 @@ exports.userRegistration = async (req, res) => {
       });
     }
 
-    const profilePhoto = req.file ? req.file.path : null;
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: "User already exists",
+      });
+    }
 
     const userdata = {
       fullName,
       email,
       password,
-      profilePhoto,
     };
 
     const user = await User.create(userdata);
@@ -31,12 +38,10 @@ exports.userRegistration = async (req, res) => {
       message: "User registration successful",
       user,
     });
+
   } catch (error) {
-    fs.promises
-      .unlink(req?.file?.path ?? "")
-      .catch((err) =>
-        console.log("File delete problem:", err)
-      );
+
+    console.log(error);
 
     res.status(500).json({
       success: false,
