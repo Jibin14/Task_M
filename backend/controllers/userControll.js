@@ -6,10 +6,8 @@ const fs = require("fs");
 // ================= REGISTER =================
 exports.userRegistration = async (req, res) => {
   try {
-
     const { fullName, email, password } = req.body;
 
-    // CHECK FIELDS
     if (!fullName || !email || !password) {
       return res.status(400).json({
         success: false,
@@ -17,42 +15,28 @@ exports.userRegistration = async (req, res) => {
       });
     }
 
-    // CHECK EXISTING USER
-    const existingUser = await User.findOne({ email });
+    const profilePhoto = req.file ? req.file.path : null;
 
-    if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: "User already exists",
-      });
-    }
-
-    // HASH PASSWORD
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // CREATE USER DATA
     const userdata = {
       fullName,
       email,
-      password: hashedPassword,
+      password,
+      profilePhoto,
     };
 
-    // SAVE USER
     const user = await User.create(userdata);
-
-    // REMOVE PASSWORD FROM RESPONSE
-    const userObject = user.toObject();
-    delete userObject.password;
 
     res.status(201).json({
       success: true,
       message: "User registration successful",
-      user: userObject,
+      user,
     });
-
   } catch (error) {
-
-    console.log(error);
+    fs.promises
+      .unlink(req?.file?.path ?? "")
+      .catch((err) =>
+        console.log("File delete problem:", err)
+      );
 
     res.status(500).json({
       success: false,
@@ -64,14 +48,8 @@ exports.userRegistration = async (req, res) => {
 // ================= LOGIN =================
 exports.userLogin = async (req, res) => {
   try {
+    const { email, password } = req.body;
 
-    const email = req.body.email?.trim();
-    const password = req.body.password?.trim();
-
-    console.log("EMAIL:", email);
-    console.log("PASSWORD:", password);
-
-    // CHECK FIELDS
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -79,10 +57,7 @@ exports.userLogin = async (req, res) => {
       });
     }
 
-    // FIND USER
     const user = await User.findOne({ email });
-
-    console.log("USER:", user);
 
     if (!user) {
       return res.status(404).json({
@@ -91,15 +66,10 @@ exports.userLogin = async (req, res) => {
       });
     }
 
-    console.log("DB PASSWORD:", user.password);
-
-    // COMPARE PASSWORD
     const ismatch = await bcrypt.compare(
-      String(password),
-      String(user.password)
+      password,
+      user.password
     );
-
-    console.log("MATCH:", ismatch);
 
     if (!ismatch) {
       return res.status(401).json({
@@ -108,37 +78,89 @@ exports.userLogin = async (req, res) => {
       });
     }
 
-    // JWT TOKEN
+    const options = {
+      userId: user._id,
+      role: user.role,
+    };
+
     const token = jwt.sign(
-      {
-        userId: user._id,
-      },
+      options,
       process.env.JWT_SECRET_KEY,
       { expiresIn: "30min" }
     );
 
-    // REMOVE PASSWORD
     const userObject = user.toObject();
     delete userObject.password;
 
     res
-      .status(200)
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        maxAge: 24 * 60 * 60 * 1000,
-      })
-      .json({
-        success: true,
-        message: "User logged in successfully",
-        user: userObject,
-      });
-
+  .status(200)
+  .cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 24 * 60 * 60 * 1000,
+  })
+  .json({
+    success: true,
+    message: "User logged in successfully",
+    user: userObject,
+  });
   } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
-    console.log(error);
+// ================= GET ALL USERS =================
+exports.getAllusers = async (req, res) => {
+  try {
+    const Users = await User.find();
 
+    if (!Users) {
+      return res.status(404).json({
+        success: false,
+        message: "Users not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      Users,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ================= UPDATE USER STATUS =================
+exports.updateUserStatus = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.status = !user.status;
+
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "User status updated",
+      user: updatedUser,
+    });
+  } catch (error) {
     res.status(500).json({
       success: false,
       message: error.message,
@@ -149,7 +171,6 @@ exports.userLogin = async (req, res) => {
 // ================= LOGOUT =================
 exports.logoutUser = async (req, res) => {
   try {
-
     res
       .status(200)
       .clearCookie("token", {
@@ -161,9 +182,74 @@ exports.logoutUser = async (req, res) => {
         success: true,
         message: "User logged out successfully",
       });
-
   } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
+// ================= UPDATE PROFILE =================
+exports.updatedProfile = async (req, res) => {
+  try {
+    const { userId } = req;
+
+    const { email, fullName } = req.body;
+
+    const profilePhoto = req?.file?.path ?? null;
+
+    if (!email || !fullName) {
+      if (profilePhoto) {
+        fs.promises
+          .unlink(profilePhoto)
+          .catch(() =>
+            console.log("Error while deleting")
+          );
+      }
+
+      return res.status(400).json({
+        success: false,
+        message: "Please fill all fields",
+      });
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      if (profilePhoto) {
+        fs.promises
+          .unlink(profilePhoto)
+          .catch(() =>
+            console.log("Error while deleting")
+          );
+      }
+
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.email = email;
+    user.fullName = fullName;
+
+    if (profilePhoto) {
+      user.profilePhoto = profilePhoto;
+    }
+
+    const updatedUser = await user.save();
+
+    const updatedUserobject = updatedUser.toObject();
+
+    delete updatedUserobject.password;
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: updatedUserobject,
+    });
+  } catch (error) {
     res.status(500).json({
       success: false,
       message: error.message,
