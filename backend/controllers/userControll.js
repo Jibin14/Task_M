@@ -1,13 +1,17 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
 
 // ================= REGISTER =================
 exports.userRegistration = async (req, res) => {
   try {
 
-    const { fullName, email, password } = req.body;
+    let { fullName, email, password } = req.body;
+
+    // REMOVE EXTRA SPACES
+    fullName = fullName?.trim();
+    email = email?.trim().toLowerCase();
+    password = password?.trim();
 
     // CHECK FIELDS
     if (!fullName || !email || !password) {
@@ -30,15 +34,12 @@ exports.userRegistration = async (req, res) => {
     // HASH PASSWORD
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // CREATE USER DATA
-    const userdata = {
+    // CREATE USER
+    const user = await User.create({
       fullName,
       email,
       password: hashedPassword,
-    };
-
-    // SAVE USER
-    const user = await User.create(userdata);
+    });
 
     // REMOVE PASSWORD FROM RESPONSE
     const userObject = user.toObject();
@@ -65,7 +66,13 @@ exports.userRegistration = async (req, res) => {
 exports.userLogin = async (req, res) => {
   try {
 
-    const { email, password } = req.body;
+    let { email, password } = req.body;
+
+    // REMOVE EXTRA SPACES
+    email = email?.trim().toLowerCase();
+    password = password?.trim();
+
+    console.log("REQ BODY:", req.body);
 
     // CHECK FIELDS
     if (!email || !password) {
@@ -78,6 +85,8 @@ exports.userLogin = async (req, res) => {
     // FIND USER
     const user = await User.findOne({ email });
 
+    console.log("DB USER:", user);
+
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -85,11 +94,16 @@ exports.userLogin = async (req, res) => {
       });
     }
 
+    console.log("ENTERED PASSWORD:", password);
+    console.log("DB HASH:", user.password);
+
     // COMPARE PASSWORD
     const ismatch = await bcrypt.compare(
       password,
       user.password
     );
+
+    console.log("MATCH:", ismatch);
 
     if (!ismatch) {
       return res.status(401).json({
@@ -99,13 +113,11 @@ exports.userLogin = async (req, res) => {
     }
 
     // JWT TOKEN
-    const options = {
-      userId: user._id,
-      role: user.role,
-    };
-
     const token = jwt.sign(
-      options,
+      {
+        userId: user._id,
+        role: user.role,
+      },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "30min" }
     );
@@ -156,6 +168,8 @@ exports.logoutUser = async (req, res) => {
       });
 
   } catch (error) {
+
+    console.log(error);
 
     res.status(500).json({
       success: false,
