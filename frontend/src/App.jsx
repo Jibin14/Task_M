@@ -5,6 +5,9 @@ import "./App.css";
 import Header from './componentsss/Header';
 import Login from './componentsss/Login';
 import Register from './componentsss/Register';
+import Home from './componentsss/Home';
+import EditTask from './componentsss/Edit';
+import NewTask from './componentsss/NewTask';
 
 function App() {
 
