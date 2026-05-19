@@ -1,0 +1,706 @@
+/* =========================
+   RESET
+========================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #f7f7f7;
+  font-family: "Poppins", sans-serif;
+}
+
+/* =========================
+   HOME PAGE
+========================= */
+
+.home-page {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  background: #f7f7f7;
+
+  transition: all 0.3s ease;
+}
+
+/* DARK MODE */
+
+.home-page.dark {
+  background: #121212;
+  color: white;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+  width: 280px;
+  min-height: 100vh;
+
+  background: #ffffff;
+
+  border-right: 1px solid #ececec;
+
+  padding: 24px 18px;
+
+  display: flex;
+  flex-direction: column;
+
+  transition: all 0.3s ease;
+}
+
+/* DARK SIDEBAR */
+
+.home-page.dark .sidebar {
+  background: #1e1e1e;
+  border-right: 1px solid #333;
+}
+
+/* =========================
+   CALENDAR
+========================= */
+
+.calendar-card {
+  border: none !important;
+  background: transparent !important;
+  margin-bottom: 10px;
+}
+
+.react-calendar {
+  width: 100%;
+  border: none !important;
+  background: transparent;
+  font-family: inherit;
+
+  transition: all 0.3s ease;
+}
+
+/* DARK CALENDAR */
+
+.home-page.dark .react-calendar {
+  color: white;
+}
+
+.react-calendar__navigation {
+  margin-bottom: 10px;
+}
+
+.react-calendar__navigation button {
+  background: none;
+  border: none;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #333;
+
+  transition: 0.2s ease;
+}
+
+.home-page.dark
+  .react-calendar__navigation button {
+  color: white;
+}
+
+.react-calendar__navigation button:hover {
+  background: transparent !important;
+  color: #2f80ed;
+}
+
+.react-calendar__month-view__weekdays {
+  text-transform: uppercase;
+  font-size: 10px;
+  color: #999;
+}
+
+.home-page.dark
+  .react-calendar__month-view__weekdays {
+  color: #aaa;
+}
+
+.react-calendar__tile {
+  border-radius: 50%;
+  height: 38px;
+
+  font-size: 12px;
+
+  transition: 0.2s ease;
+}
+
+.home-page.dark
+  .react-calendar__tile {
+  color: white;
+}
+
+.react-calendar__tile:hover {
+  background: #ececec !important;
+}
+
+.home-page.dark
+  .react-calendar__tile:hover {
+  background: #2a2a2a !important;
+}
+
+.react-calendar__tile--active {
+  background: #b7efb0 !important;
+  color: #111 !important;
+}
+
+.react-calendar__tile--now {
+  background: #2f80ed !important;
+  color: white !important;
+}
+
+/* =========================
+   SIDEBAR SECTION
+========================= */
+
+.sidebar-task-section {
+  margin-top: 28px;
+}
+
+.sidebar-heading {
+  font-size: 12px;
+  font-weight: 700;
+
+  color: #888;
+
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  margin-bottom: 14px;
+
+  padding-left: 4px;
+}
+
+/* DARK TEXT */
+
+.home-page.dark .sidebar-heading {
+  color: #ccc;
+}
+
+.sidebar-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 14px;
+
+  border-radius: 14px;
+
+  margin-bottom: 10px;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.sidebar-item span {
+  font-size: 14px;
+  font-weight: 500;
+
+  color: #222;
+}
+
+/* DARK SIDEBAR ITEM */
+
+.home-page.dark .sidebar-item span {
+  color: white;
+}
+
+.sidebar-item:hover {
+  background: #f2f2f2;
+}
+
+.home-page.dark .sidebar-item:hover {
+  background: #2a2a2a;
+}
+
+.active-item {
+  background: #f2f2f2;
+}
+
+.home-page.dark .active-item {
+  background: #2a2a2a;
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.main-content {
+  flex: 1;
+
+  min-height: 100vh;
+
+  padding: 30px 40px;
+
+  position: relative;
+
+  overflow-y: auto;
+
+  background: #f9f9f9;
+
+  transition: all 0.3s ease;
+}
+
+/* DARK MAIN CONTENT */
+
+.home-page.dark .main-content {
+  background: #181818;
+}
+
+/* =========================
+   TOPBAR
+========================= */
+
+.topbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.top-icons {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.top-icon {
+  font-size: 18px;
+  color: #444;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+/* DARK ICON */
+
+.home-page.dark .top-icon {
+  color: white;
+}
+
+.top-icon:hover {
+  color: black;
+  transform: scale(1.1);
+}
+
+.home-page.dark .top-icon:hover {
+  color: #2f80ed;
+}
+
+/* =========================
+   PROFILE
+========================= */
+
+.profile-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+.profile-img {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+}
+
+/* =========================
+   LOGOUT
+========================= */
+
+.logout-dropdown {
+  position: absolute;
+
+  top: 52px;
+  right: 0;
+
+  background: white;
+
+  border-radius: 14px;
+
+  padding: 10px;
+
+  box-shadow: 0 10px 20px
+    rgba(0, 0, 0, 0.1);
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: 0.2s ease;
+
+  z-index: 100;
+}
+
+/* DARK LOGOUT */
+
+.home-page.dark .logout-dropdown {
+  background: #1f1f1f;
+}
+
+.profile-wrapper:hover
+  .logout-dropdown {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* =========================
+   TODAY SECTION
+========================= */
+
+.today-section {
+  margin-top: 35px;
+}
+
+.today-title {
+  font-size: 52px;
+  font-weight: 700;
+
+  color: #222;
+
+  margin-bottom: 30px;
+}
+
+/* DARK TITLE */
+
+.home-page.dark .today-title {
+  color: white;
+}
+
+.no-task {
+  color: #777;
+  font-size: 15px;
+}
+
+/* DARK NO TASK */
+
+.home-page.dark .no-task {
+  color: #bbb;
+}
+
+/* =========================
+   TASK CARD
+========================= */
+
+.task-card {
+  border: none !important;
+
+  border-radius: 20px !important;
+
+  margin-bottom: 18px;
+
+  overflow: hidden;
+
+  background: white;
+
+  box-shadow: 0 4px 18px
+    rgba(0, 0, 0, 0.05) !important;
+
+  transition: all 0.3s ease;
+}
+
+/* DARK TASK CARD */
+
+.home-page.dark .task-card {
+  background: #1f1f1f !important;
+
+  box-shadow: 0 4px 18px
+    rgba(0, 0, 0, 0.4) !important;
+}
+
+.task-card:hover {
+  transform: translateY(-3px);
+}
+
+/* =========================
+   COMPLETED TASK
+========================= */
+
+.completed-task {
+  opacity: 0.55;
+  filter: blur(1px);
+}
+
+.completed-task .task-title,
+.completed-task .task-desc {
+  text-decoration: line-through;
+}
+
+/* =========================
+   TASK BODY
+========================= */
+
+.task-body {
+  padding: 18px !important;
+}
+
+.task-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+/* =========================
+   CHECKBOX
+========================= */
+
+.form-check-input {
+  width: 19px;
+  height: 19px;
+
+  cursor: pointer;
+
+  margin-top: 3px;
+
+  box-shadow: none !important;
+}
+
+.form-check-input:checked {
+  background-color: #111 !important;
+  border-color: #111 !important;
+}
+
+/* DARK CHECKBOX */
+
+.home-page.dark .form-check-input {
+  background-color: #222;
+  border-color: #666;
+}
+
+/* =========================
+   TASK TITLE
+========================= */
+
+.task-title {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 600;
+
+  color: #222;
+}
+
+/* DARK TITLE */
+
+.home-page.dark .task-title {
+  color: white;
+}
+
+/* =========================
+   DESCRIPTION
+========================= */
+
+.task-desc {
+  margin-top: 5px;
+  margin-bottom: 8px;
+
+  font-size: 13px;
+  line-height: 1.5;
+
+  color: #666;
+}
+
+/* DARK DESCRIPTION */
+
+.home-page.dark .task-desc {
+  color: #ccc;
+}
+
+/* =========================
+   REPEAT BADGE
+========================= */
+
+.repeat-badge {
+  display: inline-block;
+
+  padding: 5px 12px;
+
+  border-radius: 30px;
+
+  background: #f2f4f7;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  color: #444;
+}
+
+/* DARK BADGE */
+
+.home-page.dark .repeat-badge {
+  background: #2a2a2a;
+  color: white;
+}
+
+/* =========================
+   TASK ACTIONS
+========================= */
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* =========================
+   ICON BUTTONS
+========================= */
+
+.icon-btn {
+  width: 38px;
+  height: 38px;
+
+  border: none;
+  border-radius: 12px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  transition: 0.2s ease;
+}
+
+/* EDIT */
+
+.edit-btn {
+  background: #eef4ff;
+  color: #2f80ed;
+}
+
+.edit-btn:hover {
+  background: #dce9ff;
+}
+
+/* DELETE */
+
+.delete-btn {
+  background: #fff1f1;
+  color: #eb5757;
+}
+
+.delete-btn:hover {
+  background: #ffdede;
+}
+
+/* DARK BUTTONS */
+
+.home-page.dark .edit-btn {
+  background: #1d3557;
+  color: #8ab4ff;
+}
+
+.home-page.dark .delete-btn {
+  background: #402020;
+  color: #ff8b8b;
+}
+
+/* =========================
+   FLOATING BUTTON
+========================= */
+
+.floating-btn {
+  position: fixed;
+
+  right: 35px;
+  bottom: 30px;
+
+  width: 62px;
+  height: 62px;
+
+  border-radius: 50% !important;
+
+  border: none !important;
+
+  background: white !important;
+  color: black !important;
+
+  font-size: 24px !important;
+
+  box-shadow: 0 8px 20px
+    rgba(0, 0, 0, 0.15);
+
+  transition: 0.2s ease;
+
+  z-index: 100;
+}
+
+/* DARK FLOATING BUTTON */
+
+.home-page.dark .floating-btn {
+  background: #2a2a2a !important;
+  color: white !important;
+}
+
+.floating-btn:hover {
+  transform: scale(1.08);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 992px) {
+  .home-page {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-height: auto;
+
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .main-content {
+    padding: 25px 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .today-title {
+    font-size: 34px;
+  }
+
+  .task-title {
+    font-size: 15px;
+  }
+
+  .floating-btn {
+    width: 54px;
+    height: 54px;
+  }
+
+  .task-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .task-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

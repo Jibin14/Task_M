@@ -1,0 +1,553 @@
+/* =========================
+   GLOBAL
+========================= */
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #1e1e1e;
+  font-family: "Poppins", sans-serif;
+}
+
+.home-page {
+  display: flex;
+  width: 95%;
+  height: 95vh;
+  margin: 20px auto;
+  background: #f6f6f6;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+  width: 260px;
+  background: #f6f6f6;
+  border-right: 1px solid #d9d9d9;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* LOGO */
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.logo-box {
+  width: 48px;
+  height: 48px;
+  background: #2f80ed;
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+}
+
+.logo-text {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  color: #111;
+}
+
+/* =========================
+   CALENDAR
+========================= */
+
+.calendar-card {
+  border: none !important;
+  background: transparent !important;
+  margin-bottom: 30px;
+}
+
+.react-calendar {
+  width: 100%;
+  border: none !important;
+  background: transparent;
+  font-size: 12px;
+}
+
+.react-calendar__navigation {
+  margin-bottom: 10px;
+}
+
+.react-calendar__navigation button {
+  min-width: 35px;
+  background: none;
+  border: none;
+  font-size: 14px;
+}
+
+.react-calendar__tile {
+  border-radius: 50%;
+  height: 35px;
+}
+
+.react-calendar__tile--active {
+  background: #b7efb0 !important;
+  color: black !important;
+}
+
+.react-calendar__tile:hover {
+  background: #ececec !important;
+}
+
+/* =========================
+   SIDEBAR LISTS
+========================= */
+
+.sidebar-section {
+  margin-top: 20px;
+}
+
+.sidebar-section h5 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.sidebar-item {
+  background: #ececec;
+  padding: 12px 15px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.main-content {
+  flex: 1;
+  padding: 30px;
+  position: relative;
+  overflow-y: auto;
+}
+
+/* =========================
+   TOPBAR
+========================= */
+
+.topbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.top-icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.top-icon {
+  font-size: 16px;
+  cursor: pointer;
+  color: #444;
+}
+
+.profile-img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+}
+
+/* =========================
+   TITLE
+========================= */
+
+.today-title {
+  font-size: 42px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 30px;
+}
+
+/* =========================
+   TASK INPUTS
+========================= */
+
+.custom-input {
+  border: none !important;
+  border-radius: 6px !important;
+  background: #ececec !important;
+  padding: 12px 14px !important;
+  font-size: 14px;
+  margin-bottom: 15px;
+  box-shadow: none !important;
+}
+
+.custom-input:focus {
+  background: #ececec !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* =========================
+   COLOR SECTION
+========================= */
+
+.color-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 25px 0 20px;
+}
+
+.color-container {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.color-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: 0.2s ease;
+}
+
+.selected-color {
+  border: 3px solid #222;
+  transform: scale(1.08);
+}
+
+/* =========================
+   REPEAT CARD
+========================= */
+
+.repeat-card {
+  border: none !important;
+  border-radius: 10px !important;
+  background: #ececec !important;
+  padding: 10px;
+}
+
+.repeat-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+/* LEFT */
+
+.repeat-left {
+  flex: 1;
+}
+
+.repeat-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.repeat-header h5 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.repeat-header p {
+  font-size: 13px;
+  color: #666;
+}
+
+/* =========================
+   REPEAT BUTTONS
+========================= */
+
+.repeat-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.repeat-buttons .btn {
+  border: none !important;
+  background: #dddddd !important;
+  color: #444 !important;
+  border-radius: 30px !important;
+  padding: 8px 25px !important;
+  font-size: 13px;
+  transition: 0.2s ease;
+}
+
+.repeat-buttons .btn:hover {
+  transform: scale(1.03);
+}
+
+.repeat-buttons .btn-dark {
+  background: #111 !important;
+  color: white !important;
+}
+
+/* =========================
+   DAYS
+========================= */
+
+.days-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.day-circle {
+  width: 38px;
+  height: 38px;
+  background: #f7f7f7;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 11px;
+  color: #666;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.day-circle:hover {
+  background: #d8ffd2;
+  transform: scale(1.05);
+}
+
+.active-day {
+  background: #111 !important;
+  color: white !important;
+}
+
+/* =========================
+   INFO TEXT
+========================= */
+
+.repeat-info {
+  margin-top: 15px;
+}
+
+.repeat-info p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+/* =========================
+   MONTHLY BOX
+========================= */
+
+.monthly-box {
+  margin-top: 15px;
+}
+
+.monthly-box p {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.monthly-box select {
+  border-radius: 10px !important;
+  border: none !important;
+  background: white !important;
+  padding: 10px !important;
+  font-size: 14px;
+  box-shadow: none !important;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.repeat-footer {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #ccc;
+  padding-top: 15px;
+  font-size: 13px;
+  color: #555;
+}
+
+/* =========================
+   SWITCH
+========================= */
+
+.form-check-input {
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: #111 !important;
+  border-color: #111 !important;
+}
+
+/* =========================
+   RIGHT SIDE
+========================= */
+
+.repeat-right {
+  width: 280px;
+}
+
+.repeat-right h5 {
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+.tag-container {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tag-container .btn {
+  border: none !important;
+  background: #f7f7f7 !important;
+  color: #444 !important;
+  border-radius: 20px !important;
+  font-size: 13px;
+  padding: 7px 16px !important;
+}
+
+/* =========================
+   TASK CARD
+========================= */
+
+.task-card {
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 5px;
+}
+
+.task-body h5 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.task-body p {
+  font-size: 13px;
+  color: #555;
+}
+
+/* =========================
+   FLOATING BUTTON
+========================= */
+
+.floating-btn,
+.submit-btn {
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50% !important;
+  border: none !important;
+  background: white !important;
+  color: black !important;
+  font-size: 20px !important;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  transition: 0.2s ease;
+}
+
+.floating-btn:hover,
+.submit-btn:hover {
+  transform: scale(1.05);
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal-content {
+  border-radius: 16px !important;
+  border: none !important;
+}
+
+.modal-header {
+  border-bottom: none !important;
+}
+
+.modal-footer {
+  border-top: none !important;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 992px) {
+
+  .home-page {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .repeat-container {
+    flex-direction: column;
+  }
+
+  .repeat-right {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .repeat-buttons {
+    flex-wrap: wrap;
+  }
+
+  .days-container {
+    flex-wrap: wrap;
+  }
+
+  .repeat-right {
+    width: 100%;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+
+  .today-title {
+    font-size: 30px;
+  }
+
+  .color-circle {
+    width: 32px;
+    height: 32px;
+  }
+
+  .floating-btn,
+  .submit-btn {
+    width: 50px;
+    height: 50px;
+  }
+
+  .day-circle {
+    width: 34px;
+    height: 34px;
+    font-size: 10px;
+  }
+}

@@ -1,0 +1,189 @@
+/* =========================
+   PAGE
+========================= */
+
+.edit-page {
+  width: 100%;
+  min-height: 100vh;
+
+  background: #f7f7f7;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 30px;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.edit-card {
+  width: 100%;
+  max-width: 650px;
+
+  border: none !important;
+  border-radius: 24px !important;
+
+  padding: 10px;
+
+  box-shadow: 0 10px 35px
+    rgba(0, 0, 0, 0.08) !important;
+}
+
+/* =========================
+   TITLE
+========================= */
+
+.edit-title {
+  font-size: 34px;
+  font-weight: 700;
+
+  color: #222;
+
+  margin-bottom: 28px;
+}
+
+/* =========================
+   LABELS
+========================= */
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #444;
+
+  margin-bottom: 8px;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+.form-control,
+.form-select {
+  height: 48px !important;
+
+  border-radius: 14px !important;
+
+  border: 1px solid #ddd !important;
+
+  box-shadow: none !important;
+
+  font-size: 14px !important;
+
+  padding-left: 14px !important;
+}
+
+textarea.form-control {
+  height: auto !important;
+  padding-top: 12px !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #111 !important;
+  box-shadow: none !important;
+}
+
+/* =========================
+   COLOR PICKER
+========================= */
+
+input[type="color"] {
+  padding: 4px !important;
+  cursor: pointer;
+}
+
+/* =========================
+   DAYS BOX
+========================= */
+
+.days-box {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* =========================
+   DAY BUTTON
+========================= */
+
+.day-btn {
+  border: none !important;
+
+  background: #ececec !important;
+  color: #222 !important;
+
+  border-radius: 30px !important;
+
+  padding: 8px 16px !important;
+
+  font-size: 13px !important;
+  font-weight: 500 !important;
+
+  transition: 0.2s ease;
+}
+
+.day-btn:hover {
+  transform: scale(1.05);
+}
+
+.active-day {
+  background: #111 !important;
+  color: white !important;
+}
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 14px;
+
+  margin-top: 30px;
+}
+
+.edit-actions .btn {
+  border-radius: 12px !important;
+
+  padding: 10px 20px !important;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .edit-page {
+    padding: 20px;
+  }
+
+  .edit-card {
+    border-radius: 18px !important;
+  }
+
+  .edit-title {
+    font-size: 28px;
+  }
+
+  .edit-actions {
+    flex-direction: column;
+  }
+
+  .edit-actions .btn {
+    width: 100%;
+  }
+}
