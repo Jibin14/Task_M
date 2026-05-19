@@ -29,17 +29,24 @@ const Register = () => {
 
         password: yup
             .string()
-            .required("Please enter your password"),
+            .required("Please enter your password")
+            .min(6, "Password must be at least 6 characters"),
     });
 
-    // Register Submit
+    // ================= REGISTER =================
     const handleRegister = async (values) => {
 
         try {
 
+            const payload = {
+                fullName: values.fullName,
+                email: values.email,
+                password: values.password,
+            };
+
             const { data } = await instance.post(
                 "/users/register",
-                values
+                payload
             );
 
             toast.success(data?.message);
@@ -48,9 +55,12 @@ const Register = () => {
 
         } catch (error) {
 
+            console.log(error);
+
             toast.error(
                 error?.response?.data?.message ||
-                error?.message
+                error?.message ||
+                "Something went wrong"
             );
         }
     };
