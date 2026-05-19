@@ -1,269 +1,156 @@
-import { Container, Card, Form, Button } from "react-bootstrap";
-import * as formik from "formik";
-import * as yup from "yup";
-import { FaFacebook } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
-import { SiApple } from "react-icons/si";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import instance from "../axios";
-import "./Login.css";
+const User = require("../models/User");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const fs = require("fs");
 
-const Register = () => {
+// ================= REGISTER =================
+exports.userRegistration = async (req, res) => {
+  try {
 
-    const { Formik } = formik;
+    const { fullName, email, password } = req.body;
 
-    const navigate = useNavigate();
+    if (!fullName || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Please fill all fields properly",
+      });
+    }
 
-    const schema = yup.object().shape({
+    const existingUser = await User.findOne({ email });
 
-        fullName: yup
-            .string()
-            .required("Please enter your name")
-            .min(3, "At least 3 characters needed"),
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: "User already exists",
+      });
+    }
 
-        email: yup
-            .string()
-            .required("Please enter your email")
-            .email("Please enter a valid email"),
+    // HASH PASSWORD
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-        password: yup
-            .string()
-            .required("Please enter your password")
-            .min(6, "Password must be at least 6 characters"),
-    });
-
-    // ================= REGISTER =================
-    const handleRegister = async (values) => {
-
-        try {
-
-            const payload = {
-                fullName: values.fullName,
-                email: values.email,
-                password: values.password,
-            };
-
-            const { data } = await instance.post(
-                "/users/register",
-                payload
-            );
-
-            toast.success(data?.message);
-
-            navigate("/");
-
-        } catch (error) {
-
-            console.log(error);
-
-            toast.error(
-                error?.response?.data?.message ||
-                error?.message ||
-                "Something went wrong"
-            );
-        }
+    const userdata = {
+      fullName,
+      email,
+      password: hashedPassword,
     };
 
-    return (
+    const user = await User.create(userdata);
 
-        <div className="login-page position-relative">
+    // REMOVE PASSWORD FROM RESPONSE
+    const userObject = user.toObject();
+    delete userObject.password;
 
-            {/* Register Card */}
-            <Container className="d-flex justify-content-center align-items-center login-container">
+    res.status(201).json({
+      success: true,
+      message: "User registration successful",
+      user: userObject,
+    });
 
-                <Card className="login-card">
+  } catch (error) {
 
-                    <Card.Body>
+    console.log(error);
 
-                        {/* Title */}
-                        <div className="text-center">
-
-                            <h2 className="login-title">
-                                Register
-                            </h2>
-
-                            <p className="login-subtitle">
-                                Welcome! Sign up using your
-                                social account or email to continue
-                            </p>
-
-                        </div>
-
-                        {/* Social Icons */}
-                        <div className="social-icons">
-
-                            <div className="social-btn">
-                                <FaFacebook />
-                            </div>
-
-                            <div className="social-btn">
-                                <FcGoogle />
-                            </div>
-
-                            <div className="social-btn">
-                                <SiApple />
-                            </div>
-
-                        </div>
-
-                        {/* Formik */}
-                        <Formik
-
-                            validationSchema={schema}
-
-                            initialValues={{
-                                fullName: "",
-                                email: "",
-                                password: "",
-                            }}
-
-                            onSubmit={handleRegister}
-
-                        >
-
-                            {({
-                                handleSubmit,
-                                handleChange,
-                                handleBlur,
-                                values,
-                                errors,
-                                touched,
-                            }) => (
-
-                                <Form
-                                    noValidate
-                                    onSubmit={handleSubmit}
-                                    className="login-form"
-                                >
-
-                                    {/* Full Name */}
-                                    <Form.Group className="mb-4">
-
-                                        <Form.Control
-                                            type="text"
-                                            name="fullName"
-                                            placeholder="Full Name"
-                                            value={values.fullName}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            isInvalid={
-                                                touched.fullName &&
-                                                !!errors.fullName
-                                            }
-                                            className="custom-input"
-                                        />
-
-                                        <Form.Control.Feedback type="invalid">
-                                            {errors.fullName}
-                                        </Form.Control.Feedback>
-
-                                    </Form.Group>
-
-                                    {/* Email */}
-                                    <Form.Group className="mb-4">
-
-                                        <Form.Control
-                                            type="email"
-                                            name="email"
-                                            placeholder="Email"
-                                            value={values.email}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            isInvalid={
-                                                touched.email &&
-                                                !!errors.email
-                                            }
-                                            className="custom-input"
-                                        />
-
-                                        <Form.Control.Feedback type="invalid">
-                                            {errors.email}
-                                        </Form.Control.Feedback>
-
-                                    </Form.Group>
-
-                                    {/* Password */}
-                                    <Form.Group className="mb-4">
-
-                                        <Form.Control
-                                            type="password"
-                                            name="password"
-                                            placeholder="Password"
-                                            value={values.password}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            isInvalid={
-                                                touched.password &&
-                                                !!errors.password
-                                            }
-                                            className="custom-input"
-                                        />
-
-                                        <Form.Control.Feedback type="invalid">
-                                            {errors.password}
-                                        </Form.Control.Feedback>
-
-                                    </Form.Group>
-
-                                    {/* Submit */}
-                                    <div className="text-center mt-4">
-
-                                        <Button
-                                            type="submit"
-                                            className="login-btn"
-                                        >
-                                            Register
-                                        </Button>
-
-                                    </div>
-
-                                </Form>
-                            )}
-
-                        </Formik>
-
-                        {/* Login Link */}
-                        <div className="text-center mt-3">
-
-                            <p
-                                style={{
-                                    fontSize: 13,
-                                    color: "#8a95b0",
-                                }}
-                            >
-
-                                Already have an account?{" "}
-
-                                <Link
-                                    to="/"
-                                    style={{
-                                        color: "#3B8BD4",
-                                        fontWeight: 600,
-                                    }}
-                                >
-                                    Login
-                                </Link>
-
-                            </p>
-
-                        </div>
-
-                    </Card.Body>
-
-                </Card>
-
-            </Container>
-
-            {/* Background */}
-            <img
-                src="bg1.png"
-                alt="bg"
-                className="bg1"
-            />
-
-        </div>
-    );
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
-export default Register;
+// ================= LOGIN =================
+exports.userLogin = async (req, res) => {
+  try {
+
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter email and password",
+      });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Email not found",
+      });
+    }
+
+    const ismatch = await bcrypt.compare(
+      password,
+      user.password
+    );
+
+    if (!ismatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials",
+      });
+    }
+
+    const options = {
+      userId: user._id,
+      role: user.role,
+    };
+
+    const token = jwt.sign(
+      options,
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "30min" }
+    );
+
+    const userObject = user.toObject();
+    delete userObject.password;
+
+    res
+      .status(200)
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: 24 * 60 * 60 * 1000,
+      })
+      .json({
+        success: true,
+        message: "User logged in successfully",
+        user: userObject,
+      });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ================= LOGOUT =================
+exports.logoutUser = async (req, res) => {
+  try {
+
+    res
+      .status(200)
+      .clearCookie("token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      })
+      .json({
+        success: true,
+        message: "User logged out successfully",
+      });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
