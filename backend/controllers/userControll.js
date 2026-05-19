@@ -1,17 +1,13 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
 
 // ================= REGISTER =================
 exports.userRegistration = async (req, res) => {
   try {
 
-    let { fullName, email, password } = req.body;
-
-    // REMOVE EXTRA SPACES
-    fullName = fullName?.trim();
-    email = email?.trim().toLowerCase();
-    password = password?.trim();
+    const { fullName, email, password } = req.body;
 
     // CHECK FIELDS
     if (!fullName || !email || !password) {
@@ -34,12 +30,15 @@ exports.userRegistration = async (req, res) => {
     // HASH PASSWORD
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // CREATE USER
-    const user = await User.create({
+    // CREATE USER DATA
+    const userdata = {
       fullName,
       email,
       password: hashedPassword,
-    });
+    };
+
+    // SAVE USER
+    const user = await User.create(userdata);
 
     // REMOVE PASSWORD FROM RESPONSE
     const userObject = user.toObject();
@@ -66,13 +65,11 @@ exports.userRegistration = async (req, res) => {
 exports.userLogin = async (req, res) => {
   try {
 
-    let { email, password } = req.body;
+    const email = req.body.email?.trim();
+    const password = req.body.password?.trim();
 
-    // REMOVE EXTRA SPACES
-    email = email?.trim().toLowerCase();
-    password = password?.trim();
-
-    console.log("REQ BODY:", req.body);
+    console.log("EMAIL:", email);
+    console.log("PASSWORD:", password);
 
     // CHECK FIELDS
     if (!email || !password) {
@@ -85,7 +82,7 @@ exports.userLogin = async (req, res) => {
     // FIND USER
     const user = await User.findOne({ email });
 
-    console.log("DB USER:", user);
+    console.log("USER:", user);
 
     if (!user) {
       return res.status(404).json({
@@ -94,13 +91,12 @@ exports.userLogin = async (req, res) => {
       });
     }
 
-    console.log("ENTERED PASSWORD:", password);
-    console.log("DB HASH:", user.password);
+    console.log("DB PASSWORD:", user.password);
 
     // COMPARE PASSWORD
     const ismatch = await bcrypt.compare(
-      password,
-      user.password
+      String(password),
+      String(user.password)
     );
 
     console.log("MATCH:", ismatch);
@@ -116,7 +112,6 @@ exports.userLogin = async (req, res) => {
     const token = jwt.sign(
       {
         userId: user._id,
-        role: user.role,
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "30min" }
@@ -168,8 +163,6 @@ exports.logoutUser = async (req, res) => {
       });
 
   } catch (error) {
-
-    console.log(error);
 
     res.status(500).json({
       success: false,
